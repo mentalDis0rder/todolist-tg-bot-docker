@@ -1,0 +1,27 @@
+services:
+  todobot:
+    build: .
+    container_name: "${PR_NAME}-bot"
+    volumes:
+       - /home/mental/server-docker/project/todolist_tg-docker/docker:/app
+    environment:
+      TOKEN: "${TOKEN}"
+    env_file:
+      - .env
+    depends_on:
+      - tododb
+    restart: unless-stopped
+
+  tododb:
+    image: postgres
+    container_name: "${PR_NAME}-db"
+    environment:
+      POSTGRES_USER: "${DB_USER}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+      POSTGRES_DB: "${DB_NAME}"
+    ports:
+      - "5432:5432"
+    volumes:
+      - /home/mental/server-docker/project/todolist_tg-docker/docker/postgres_data:/var/lib/postgresql/data
+
+
